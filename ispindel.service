@@ -1,0 +1,11 @@
+[Unit]
+Description=iSpindel listener
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/sbin/ispindel-server.py
+Restart=on-failure
+RestartSec=10000ms
+[Install]
+WantedBy=multi-user.target
