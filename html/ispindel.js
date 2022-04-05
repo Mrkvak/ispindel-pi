@@ -5,6 +5,7 @@ var availableDevices = []
 
 var selectedDevice = null;
 var selectedColumns = ["date", "temperature", "gravity" ];
+
 var selectedInterval = null;
 var availableIntervals = [];
 var selectedColumnsStr = "date,temperature,gravity";
@@ -131,26 +132,40 @@ async function getChartData() {
 
 	var chartLabels = [];
 	var chartData = {};
-	
+	var chartDates = [];
+	var chartDataObjs = [];
 
 	for (const line of data) {
 		for (const col of selectedColumns) {
 			if (col == "date") {
 				continue;
 			}
+
+			var chartDataObj = {};
+
 			if (typeof chartData[col] == 'undefined') {
 				chartData[col] = [line[col]];
+				chartDataObjs[col] = [];
 			} else {
 				chartData[col].push(line[col]);
 			}
+
+			chartDataObj.x = Date.parse(line["date"]);
+			chartDataObj.y = line[col];
+			chartDataObjs[col].push(chartDataObj);
 		}
+
 		chartLabels.push(line["date"]);
+		chartDates.push(Date.parse(line["date"]));
 	}
 
 	var datasets = [];
 	var yAxes = {};
 	var i = 0;
 	var backgrounds = [ "red", "blue", "green", "pink" ];
+	var xAxis = {};
+	xAxis.type = "time";
+	yAxes["x"] = xAxis;
 	for (const col of selectedColumns) {
 		if (col == "date") {
 			continue;
@@ -158,7 +173,8 @@ async function getChartData() {
 		var dataset = {};
 		dataset.label = col;
 		dataset.yAxisID = col;
-		dataset.data = chartData[col];
+		dataset.data = [];
+		dataset.data = chartDataObjs[col];
 		dataset.backgroundColor = backgrounds[i];
 		datasets.push(dataset);
 
@@ -181,7 +197,19 @@ async function getChartData() {
 			datasets: datasets,
 		},
 		options: {
-			scales: yAxes
+//			scales: yAxes
+			scales: {
+				x: {
+					type: "time"
+				},
+				y: {
+				    title: {
+        				 display: true,
+			        	  text: 'value'
+				        }		
+				}
+
+			}
 		}
 	});
 
