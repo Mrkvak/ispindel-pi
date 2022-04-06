@@ -200,14 +200,20 @@ async function getChartData() {
 //			scales: yAxes
 			scales: {
 				x: {
-					type: "time"
+					type: "time",
+					time: {
+						displayFormats: {
+							hour: "yyyy-MM-dd hh:mm"
+						},
+						unit: 'hour'
+					}
 				},
-				y: {
+/*				y: {
 				    title: {
         				 display: true,
 			        	  text: 'value'
 				        }		
-				}
+				}*/
 
 			}
 		}

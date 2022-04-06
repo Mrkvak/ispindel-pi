@@ -52,7 +52,7 @@ with open(device_path, 'r') as fd:
             interval_start = time
             continue
 
-        if (time-last_time).total_seconds() > 10 * float(interval):
+        if (time-last_time).total_seconds() > 300 * float(interval):
             interval_end = time
             intvl = { "start": interval_start, "end": interval_end}
             intervals.append(intvl)
